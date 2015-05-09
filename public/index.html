@@ -2,9 +2,31 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <script src='http://static.opentok.com/v2/js/opentok.min.js'></script>
+    <script type="text/javascript">
+        // Initialize API key, session, and token...
+        // Think of a session as a room, and a token as the key to get in to the room
+        // Sessions and tokens are generated on your server and passed down to the client
+        var apiKey = "45233022";
+        var sessionId = "2_MX40NTIzMzAyMn5-MTQzMTE5NjM4OTgyMH44eFRlWXpjWncwSVVzeDNnRk5hUFhBNTh-fg";
+        var token = "T1==cGFydG5lcl9pZD00NTIzMzAyMiZzaWc9M2Q2ZjdmYTY5MTkxOTdmZDQxNzliZDIyYmI2OTVmN2RhZGNkYjM2NTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5USXpNekF5TW41LU1UUXpNVEU1TmpNNE9UZ3lNSDQ0ZUZSbFdYcGpXbmN3U1ZWemVETm5SazVoVUZoQk5UaC1mZyZjcmVhdGVfdGltZT0xNDMxMTk2NDA2Jm5vbmNlPTAuNTc2MTYzMzgzMTg2MDYz";
+
+        // Initialize session, set up event listeners, and connect
+        var session = OT.initSession(apiKey, sessionId);
+
+        session.on("streamCreated", function(event) {
+            session.subscribe(event.stream);
+        });
+
+        session.connect(token, function(error) {
+            var publisher = OT.initPublisher();
+            session.publish(publisher);
+        });
+    </script>
+    <title>PeerReview</title>
 </head>
 <body>
     <h1>test</h1>
+    <div id="myPublisherDiv"></div>
 </body>
 </html>
