@@ -3,22 +3,17 @@
 <head lang="en">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/main.css"/>
-    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     <script src='https://static.opentok.com/v2/js/opentok.min.js'></script>
     <script type="text/javascript">
-        // Initialize API key, session, and token...
-        // Think of a session as a room, and a token as the key to get in to the room
-        // Sessions and tokens are generated on your server and passed down to the client
         var apiKey = "45233022";
         var sessionId = "2_MX40NTIzMzAyMn5-MTQzMTE5OTgwOTM0M356NHpQS1ZIMS9JRFFyUDJjeWZnVFBlbDh-fg";
         var token = "T1==cGFydG5lcl9pZD00NTIzMzAyMiZzaWc9NTMzNTRiNDI4MWFmYjA5MGY2OWY4YzYxZGZjM2FmZjVlODdkN2Y2MTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5USXpNekF5TW41LU1UUXpNVEU1T1Rnd09UTTBNMzU2TkhwUVMxWklNUzlKUkZGeVVESmplV1puVkZCbGJEaC1mZyZjcmVhdGVfdGltZT0xNDMxMTk5ODEwJm5vbmNlPTAuOTM0NjQ3NTQ0MTY0ODAyMSZleHBpcmVfdGltZT0xNDMzNzkxNTU5JmNvbm5lY3Rpb25fZGF0YT0="
-        // Initialize session, set up event listeners, and connect
         var session = OT.initSession(apiKey, sessionId);
-
         session.on("streamCreated", function(event) {
             session.subscribe(event.stream);
         });
-
         session.connect(token, function(error) {
             var publisher = OT.initPublisher();
             session.publish(publisher);
@@ -28,38 +23,23 @@
       var CLIENT_ID = '213847956806-tg3vv03rt58mbbdl4ki8ifhvngd2ngku.apps.googleusercontent.com';
       var SCOPES = 'https://www.googleapis.com/auth/drive';
 
-      /**
-       * Called when the client library is loaded to start the auth flow.
-       */
       function handleClientLoad() {
         window.setTimeout(checkAuth, 1);
       }
-
-      /**
-       * Check if the current user has authorized the application.
-       */
       function checkAuth() {
         gapi.auth.authorize(
             {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
             handleAuthResult);
       }
-
-      /**
-       * Called when authorization server replies.
-       *
-       * @param {Object} authResult Authorization result.
-       */
       function handleAuthResult(authResult) {
         var authButton = document.getElementById('authorizeButton');
         var filePicker = document.getElementById('filePicker');
         authButton.style.display = 'none';
         filePicker.style.display = 'none';
         if (authResult && !authResult.error) {
-          // Access token has been successfully retrieved, requests can be sent to the API.
           filePicker.style.display = 'block';
           filePicker.onchange = uploadFile;
         } else {
-          // No access token could be retrieved, show the button to start the authorization flow.
           authButton.style.display = 'block';
           authButton.onclick = function() {
               gapi.auth.authorize(
@@ -68,30 +48,16 @@
           };
         }
       }
-
-      /**
-       * Start the file upload.
-       *
-       * @param {Object} evt Arguments from the file selector.
-       */
       function uploadFile(evt) {
         gapi.client.load('drive', 'v2', function() {
           var file = evt.target.files[0];
           insertFile(file);
         });
       }
-
-      /**
-       * Insert new file.
-       *
-       * @param {File} fileData File object to read data from.
-       * @param {Function} callback Function to call when the request is complete.
-       */
       function insertFile(fileData, callback) {
         const boundary = '-------314159265358979323846';
         const delimiter = "\r\n--" + boundary + "\r\n";
         const close_delim = "\r\n--" + boundary + "--";
-
         var reader = new FileReader();
         reader.readAsBinaryString(fileData);
         reader.onload = function(e) {
@@ -100,7 +66,6 @@
             'title': fileData.name,
             'mimeType': contentType
           };
-
           var base64Data = btoa(reader.result);
           var multipartRequestBody =
               delimiter +
@@ -112,7 +77,6 @@
               '\r\n' +
               base64Data +
               close_delim;
-
           var request = gapi.client.request({
               'path': '/upload/drive/v2/files',
               'method': 'POST',
@@ -133,12 +97,20 @@
     <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <title>PeerReview</title>
 </head>
-<body>
-    <h1>PeerReview</h1>
-    <div id="myPublisherDiv"></div>
-    <iframe style="left:100px;"
-            height="800"
-            width="900"
-            src="https://docs.google.com/document/d/17V7u3vWyGV4r6wgW0cfcKlNat-_9TvQ8IlMWVl1NAGQ/edit?usp=sharing"></iframe>
+<body class="container-fluid">
+    <div id="header" class="row">
+        <h1 class="col-mid-11">.  PeerReview</h1>
+    </div>
+    <div class="row">
+        <p class="col-mid-12"></p>
+    </div>
+    <div class="row">
+        <div class="col-mid-4">
+            <div id="myPublisherDiv"></div>
+        </div>
+        <div class="col-mid-8" style="position: absolute; left: 25%;">
+            <iframe class="col-mid-8" height="600" width="900" src="https://docs.google.com/document/d/1QsDnuX6IsOFwjBvcJAOHK2l0iLto63cPTT9JuhfkOxE/edit?usp=sharing"></iframe>
+        </div>
+    </div>
 </body>
 </html>
